@@ -1,7 +1,4 @@
-//DOPE
-//added an option to choose a new map when you win
-//fixed the problem with the view not centering in the window when you start a new map
-//doesnt display the JOptionPane.showMessageDialog(null, "Join us for more adventure soon!") in the Y view (view 2)
+//Ben Steele & Rajah Bose
 
 import java.io.File;
 import java.io.FileNotFoundException;
