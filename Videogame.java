@@ -15,24 +15,42 @@ import java.awt.event.*;
 
 public class Videogame extends JComponent {
 
+	//the map is a square grid, this is the length/width of that grid
     private int mapSize;
+    //initialize the matrix for the map
     private int[][] map;
+    //character x position
     private int charX;
+    //character y position
     private int charY;
+    //oracle x position
     private int oracleX;
+    //oracle y position
     private int oracleY;
+    //variable that temporarily stores the height of the pilar at one location on the grid for the left view
     private int contourHeight;
+    //variable that temporarily stores the height of the pilar at one location on the grid for the bottom view
     private int contourHeight2;
+    //stores the heightof the pilar the character is standing on
     private int positionZ;
+    //The size of one step
     private int unitSize;
+    //if view=1 the player is looking from the bottom, if view=2 the player is looking from the left
     private int view;
+    //these are used similar the the contourHeights, but they are for a special pilar that is never usable
     private int towerHeight = 0;
     private int towerHeight2 = 0;
+    //keep track of the number of moves done on the current map
     private int moves = 0;
+    //determines how large the mini map is
     private double miniMapScale = .35;
+    //set window width
     public static final int windowWidth = 1000;
+    //set window height
     public static final int windowHeight = 800;
+    //margin so the map is not drawn on the edge of the window
     private int offset = 5;
+    //background image
     private BufferedImage img;
 
 
@@ -54,12 +72,13 @@ public class Videogame extends JComponent {
         
         charX = 0;
         charY = 0;
+        //start looking from the bottom
         view = 1;  
     }
 
     public void moveRight(){
 
-        //move depending on view
+        //bottom view
         if(view == 1){
 
             //Check that Character does not leave map
@@ -76,7 +95,7 @@ public class Videogame extends JComponent {
                 else if((nextMove-current) < -1){ 
                 }
                 else{
-                    //Check if character moved to GOAL (bottom right corner of array)
+                    //Check if character moved to oracle (bottom right corner of array)
                     if(charY == oracleY && charX == oracleX-1){
                         charX++;
                         repaint();
@@ -94,6 +113,7 @@ public class Videogame extends JComponent {
                             System.exit(0);
                         }
                     }
+                    //change value so character moves to the right
                     else{
                     charX++;
                     moves++;
@@ -103,7 +123,7 @@ public class Videogame extends JComponent {
         }
     
 
-        //move depending on view
+        //view from left
         else if(view == 2){
 
             //Check that Character does not leave map
@@ -119,7 +139,7 @@ public class Videogame extends JComponent {
                 else if((nextMove2-current2) < -1){       
                 }
                 else{
-                    //Check if character moved to GOAL (bottom right corner of array)
+                    //Check if character moved to oracle (bottom right corner of array)
                     if(charX == oracleX && charY == oracleY-1){
                         charY++;
                         repaint();
@@ -139,6 +159,7 @@ public class Videogame extends JComponent {
                         else {
                         }
                     }
+                    //change value so character moves to the right
                     else{
                         charY++;
                         moves++;
@@ -150,7 +171,7 @@ public class Videogame extends JComponent {
 
     public void moveLeft(){
 
-        //move depending on view
+        //view from bottom
         if(view == 1){
 
             //Check that Character does not leave map
@@ -168,7 +189,7 @@ public class Videogame extends JComponent {
                        
                 }
                 else{
-                   //Check if character moved to GOAL (bottom right corner of array)
+                   //Check if character moved to oracle (bottom right corner of array)
                     if(charY == oracleY && charX == oracleX+1){
                         charX--;
                         repaint();
@@ -186,6 +207,7 @@ public class Videogame extends JComponent {
                             System.exit(0);
                         }
                     }
+                    //change value so character moves left
                     else{
                         charX--;
                         moves++;
@@ -194,7 +216,7 @@ public class Videogame extends JComponent {
             }
         }
 
-        //move depending on view
+        //view from left
         else if(view == 2){
             //Check that Character does not leave map
             if(charY-1 < 0){
@@ -211,7 +233,7 @@ public class Videogame extends JComponent {
                        
                 }
                 else{
-                    //Check if character moved to GOAL (bottom right corner of array)
+                    //Check if character moved to oracle (bottom right corner of array)
                     if(charX == oracleX && charY == oracleY+1){
                         charY--;
                         repaint();
@@ -229,6 +251,7 @@ public class Videogame extends JComponent {
                             System.exit(0);
                         }
                     }
+                    //change value so character moves to the left
                     else{
                         charY--;
                         moves++;
@@ -256,15 +279,15 @@ public class Videogame extends JComponent {
             //Load file
             File inputFile = new File(fileName);
             Scanner newMap = new Scanner(inputFile);
-
+            //first integer in the map file is the map size
             mapSize = newMap.nextInt();
             map = new int[mapSize][mapSize];
 
-            //Set Oracle location coordinates 
+            //the second 2 integers in the map file are the Oracle location coordinates 
             oracleX = newMap.nextInt() -1;
             oracleY = newMap.nextInt() -1;
 
-            //Input file contents intoaa map generator
+            //the rest of the integers are the heights of the pilars at each location on the map grid
             for (int i = 0; i < mapSize; i++){
                 for (int j = 0; j < mapSize; j++){
                     int dataInput = newMap.nextInt();
@@ -302,7 +325,7 @@ public class Videogame extends JComponent {
 
         int offsetXmini = (int)((getWidth() - mapSize*miniMapDimensions)/2);
         
-        //draw miniboard
+        //draw minimap
         for (int i=0; i < mapSize; i++) {
             for (int j=0; j < mapSize; j++) {
                 if ((i + j) % 2 == 0) {
@@ -319,7 +342,7 @@ public class Videogame extends JComponent {
         g.setColor(block);
         g.fillRect(offset + charX*(int)miniMapDimensions, offset + charY*(int)miniMapDimensions,(int)miniMapDimensions,(int)miniMapDimensions);
 
-        //Draw oracle location (always bottom right corner, by game design (coul be improved later))
+        //Draw oracle location
             g.setColor(emerald);
             g.fillOval(offset + (oracleX)*(int)miniMapDimensions, offset + (oracleY)*(int)miniMapDimensions, (int)miniMapDimensions, (int)miniMapDimensions);
 
@@ -445,7 +468,7 @@ public class Videogame extends JComponent {
             g.fillRect(offsetX + charX*unitSize + unitSize*3/16,(updateHeight - unitSize) - (positionZ*unitSize) + unitSize*7/8,unitSize/4,unitSize/8);
         
 
-        //Draw oracle 
+        //Draw oracle if it is in view
         if(charY == oracleY){
             int jewelHeight = updateHeight - (unitSize + unitSize*map[oracleX][oracleY]);
 

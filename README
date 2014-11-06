@@ -1,2 +1,9 @@
 Pyramid-Exploration
 Navigate the 3D map to get from start to finish using a 2D view of the world
+
+to play the game:
+  1.compile the java code in a folder with the maps ("hard1.txt","easy1.txt","beginner1.txt") and the jpg
+  2.run the program
+  3.input a map name without the ".txt" at the end, for example: hard1
+  4.use "a" to go left, "d" to go right, and "s" to switch view
+  5.you are trying to get to the dot on the mini map in the bottom right corner
